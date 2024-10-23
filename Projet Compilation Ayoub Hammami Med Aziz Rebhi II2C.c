@@ -368,7 +368,7 @@ char *analLex() { // responsable de l'analyse lexicale, c'est-à-dire qu'elle li
 
 int main() {
     
-    f = fopen("ayoub_hammami.txt_20/20", "r"); 
+    f = fopen("ayoub_hammami.txt", "r"); 
     if (f == NULL) {
         perror("Erreur à l'ouverture du fichier");
         return 1;
