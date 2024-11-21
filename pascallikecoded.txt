@@ -1,0 +1,5 @@
+program Test;
+var x,y,z: integer;
+begin
+    x := 6		
+end.
