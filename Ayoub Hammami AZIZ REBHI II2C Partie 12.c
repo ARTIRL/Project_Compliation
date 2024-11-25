@@ -53,6 +53,19 @@ int c = 0; // awel index f tableau taa symboles
 #define opadd 25
 #define opmul 26
 #define nb 27
+#define and 28 // hedhom des attributs zeydin f OPMUL OPADD OPAFF khw!!!!
+#define or 29
+#define addi 30  
+#define modd 31
+#define divi 32
+#define sous 33
+#define multi 34
+#define lt 35   //hedhom des attributs zeydin lil opprel bch naarfou enehi superieur inf etc lt par exp heya less than
+#define bt 36 
+#define leq 37
+#define beq 38
+#define eq 39
+#define diff 40
 
 typedef struct unitelex { //Unite lexical defini par ul w att
     int ul;
@@ -182,6 +195,8 @@ void erreur(int T) // changement de fonction erreur
     case(25): printf("operation d/'addition manquante");break;
     case(26): printf("operation de multiplication manquante");break;
     case(27): printf("nb manquant");break;
+    case (28): printf("Or is wrong written;");break;
+    case (29): printf("And is wrong written!");break;
     default: printf("erreur detecté de compliation");
     }
     exit(0);
@@ -299,7 +314,23 @@ int analyLex() {
                     etat = 19;
                 }else if (car == '.'){
                     etat = 20;
-                } else {
+                }else if (car == '|'){
+                    etat = 21;
+                }
+                else if (car == '&'){
+                    etat = 22;
+                }
+                else if (car == '+' || car == '-'){
+                    etat = 23;
+                }
+                else if (car == '%' || car == '/'){
+                    etat = 24;
+                }
+                else if (car == '*'){
+                    etat = 25;
+                }
+                
+                 else {
                     etat = 14;
                 }
                 break;
@@ -359,44 +390,44 @@ int analyLex() {
                 break;
             case 9:
                 symbole.ul = oprel;
-                symbole.att = oprel;
+                symbole.att = eq;
                 
                 printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                 return symbole.ul;
             case 10:
-                Reculer(1);
+                
                 car = carSuivant();
                 if (car == '=') {
                     etat = 11;
                 } else {
                     symbole.ul = oprel;
-                    symbole.att = oprel;
+                    symbole.att = bt;
                     
                     printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                     return symbole.ul;
                 }
             case 11:
                 symbole.ul = oprel;
-                symbole.att = oprel;
+                symbole.att = beq;
                 
                 printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                 return symbole.ul;
             case 6:
                 symbole.ul = oprel;
-                symbole.att = oprel;
+                symbole.att = leq;
                 
                 printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                 return symbole.ul;
             case 7:
                 symbole.ul = oprel;
-                symbole.att = oprel;
+                symbole.att = diff;
                 
                 printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                 return symbole.ul;
             case 8:
                 Reculer(1);
                 symbole.ul = oprel;
-                symbole.att = oprel;
+                symbole.att = lt;
                 
                 printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                 return symbole.ul;
@@ -440,7 +471,7 @@ int analyLex() {
                     printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                     return symbole.ul;
                 } else {
-                   
+                    
                     Reculer(1); 
                     symbole.ul = dp;
                     symbole.att = 0;
@@ -460,7 +491,61 @@ int analyLex() {
                     symbole.att = 0;// un attribut arbitraire pour pt li deja 7atinehom lkol 0 b5lef jme3t l id w les mots clé
                     printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                     return symbole.ul;
-        }   
+
+
+            case 21:
+                car = carSuivant();
+                if(car == '|'){
+                    symbole.ul = opadd;
+                    symbole.att = or;
+                    printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
+                    return symbole.ul;
+                }
+                else{
+                    erreur(28);
+                }
+
+            case 22 : 
+                car = carSuivant();
+                if(car == '&'){
+                    symbole.ul = opmul;
+                    symbole.att  = and ; 
+                    printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
+                    return symbole.ul;
+                }
+                else{
+                    erreur(29);
+                }
+            case 23:
+                symbole.ul = opadd;
+
+                if(car == '+'){
+                    symbole.att = addi;
+                }
+                else{
+                    symbole.att = sous;
+                }
+                printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
+                return symbole.ul;
+
+            case 24:
+                symbole.ul = opmul;
+                if(car == '%'){
+                    symbole.att = modd;
+                }
+                else{
+                    symbole.att = divi;
+                }
+                printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
+                return symbole.ul;
+
+            case 25 : 
+                symbole.ul = opmul;
+                symbole.att = multi;
+                printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
+                return symbole.ul;    
+        }    
+
     }
 }
 
