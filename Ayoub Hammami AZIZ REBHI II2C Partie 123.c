@@ -1,924 +1,342 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
-int c = 0; // awel index f tableau taa symboles
+import pyautogui
+import time
+import os
+import random
+from pyautogui import ImageNotFoundException
+from pynput.keyboard import Controller, Key
 
-// Projet Ayoub Hammami Med Aziz Rebhi II2C PARTIE 1 ET 2 AVEC TEST IN MAIN
+keyboard = Controller()
 
+# Paths to images and shortcuts
+# Update ur own desktop Username
+shortcut_path = r"C:\Users\Public\Desktop\League of Legends.lnk"
+desktop_path = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop\Images')
+play_image = os.path.join(desktop_path, 'play.png')
+akshan_image = os.path.join(desktop_path, 'ak.png')
+botQ_image = os.path.join(desktop_path, 'botQ.png')
+noob_image = os.path.join(desktop_path, 'noob.png')
+confirm_image = os.path.join(desktop_path, 'confirm.png')
+find_match_image = os.path.join(desktop_path, 'find.png')
+accept_image = os.path.join(desktop_path, 'accept.png')
+gold_image = os.path.join(desktop_path, 'gold.png')
+red_smite_image = os.path.join(desktop_path, 'red_smite.png')
+spin_image = os.path.join(desktop_path, 'spin.png')
+lock_image = os.path.join(desktop_path, 'lock.png')
+done_image = os.path.join(desktop_path, 'done.png')
+cont_image = os.path.join(desktop_path,'cont.png')
+levelup_image = os.path.join(desktop_path,'levelup.png')
+next_game_image= os.path.join(desktop_path,'next_game.png')
+inQ_im = os.path.join(desktop_path,'inQ.png')
+free_im = os.path.join(desktop_path,'akshan_icon.png')
+daily_im = os.path.join(desktop_path,'daily.png')
 
+# Initialize wandering flag
+def detect_daily():
+    try:
+        daily_loc = pyautogui.locateCenterOnScreen(daily_im,confidence=0.8)
+        if daily_loc:
+            click_daily()
+            print("Daily Champion reward clicked.")
+            time.sleep(1)
+            levelup()
+    except Exception as e : 
+            print("Error! occured")        
 
-
-
-
-int counter = 0;
-// Hedha aka tableau li f classe aamlneh w zedlenou l ne9s kima program w ghirou
-// Zedna E zeyda fl while w else bch yod5olch baaadhou maa syntaxe t3 C w if zeda; lbe9i mrigel
-
-#define program 1
-#define pv 2 // point virgule
-#define p 3 //point
-#define var 4
-#define dp 5 //2 points
-#define id 6
-#define v 7 // virgule
-#define integer 8
-#define rchar 9
-#define begin 10
-#define end 11
-#define opaf 12
-#define iff 13
-#define then 14
-#define elsee 15
-#define whilee 16
-#define doo 17
-#define po 18 //parenthese ouvrant
-#define pf 19 //parenthese fermant
-#define write 20
-#define read 21
-#define writeln 22
-#define readln 23
-#define oprel 24
-#define opadd 25
-#define opmul 26
-#define nb 27
-#define and 28 // hedhom des attributs zeydin f OPMUL OPADD OPAFF khw!!!!
-#define or 29
-#define addi 30  
-#define modd 31
-#define divi 32
-#define sous 33
-#define multi 34
-#define lt 35   //hedhom des attributs zeydin lil opprel bch naarfou enehi superieur inf etc lt par exp heya less than
-#define bt 36 
-#define leq 37
-#define beq 38
-#define eq 39
-#define diff 40
-#define errX 41
-
-
-typedef struct unitelex { //Unite lexical defini par ul w att
-    int ul;
-    int att; //indexation in case ID w lo5rin type or 7aja arbitraire.
-}unitelex;
-
-
-
-
-
-
-int type_table[20]; // hedhi bch ykoun fiha les types ta3 les variables(with indexation) par exp if we have [x,y,z] tq x,y int w z char , type_table=[integer,integer,char]
-
-char mot_cle[20][20]={"program", "begin", "var",
-"integer", "char", "end", "then", "if", "else", "read",
-"readln", "write", "writeln", "do", "while"};//tableau ta3 les mots clés
-
-
-
-
-int id_mot_cle[16]={1,10,4,8,9,11,14,13,15,21,23,20,22,17,16}; // hedhom les defines taa les mots clé b tartib (program 1 , begin 10 etc ....)
-char tab_iden[100][20]; // tableau des identificateurs
-
-
-
-// Les fonctions taa l partie 2 analex
-int symbole_suivant();
-void erreur(int T);
-void accepter(int T);
-int analyLex();
-void emettre(char* ch);
-char carSuivant();
-void Reculer(int k);
-int UniLexId();
-int RangerId(int k, int *c);
-
-// Fonctions taa3 l pârtie 1 syntaxique 
-void P(); // P 
-void DCL(); // DCL 
-void D(); // DCL PRIME 
-void List_id(); // List Id
-void L(); //List id prime
-void Type(); // Type
-void Inst_compose();// Insta composo
-void Inst();// Inst
-void List_inst();// Linst int
-void L_I();// List inst prime
-void I();// I 
-void Exp();// Exp 
-void S(int typehdsq);// Exp prime
-int Exp_S();//Exp simple
-void E(int typehjqs);//Exp simple prime
-int Terme();
-void T(int h);
-int Facteur();
-// Fonctions partie Semantique 
-int chercher_type(char* variable); // va accepter index f tableau ta3 les symboles w traj3elna chnowa type ta3 l variable
-void ajouter_type(int index_dans_tabID , int tp);
-int compatible(int t1 , int t2 );
-
-// erreur w accepter w emettre si we choose nektbou f fichier
-void erreur(int T);
-//void emettre(char* ch);
-void accepter(int T);
-unitelex symbole;
-int symbole_lu; // on va l'utiliser lors du parcours
-int z=0 ; //parcours du ch
-
-
- // trouver l'indexation du mot cle 
-
-
-FILE *fs;  //fichier source
-
-int sym;   // Variable globale contenat le retour du analyseur synatxique
-
-char ch[30]; // chaine pour sauvegarder la ligne parcouru
-
-/*void emettre(char* ch){
-    if (fd != NULL) {
-        fprintf(fd, "%s\n", ch); // On ecrit avec cette ligne sur le "fichier codeInterm.txt"
-        
-    } else {
-        fprintf(stderr, "Erreur : Impossible d'ouvrir le fichier 'codeInterm.txt'\n");
-    }
-}*/ // hedhi fonction nestaamlouha ken n7ebou nektbou fi ficher l output but we will write it on terminal ashel
-
-//Partie Semantique 
-
-void ajouter_type(int index_dans_tabID , int tp){
-    if(tp == integer){
-        type_table[index_dans_tabID]= integer;
-        
-    }
-    else if (tp == rchar){
-        type_table[index_dans_tabID] = rchar;
-        
-    }
-    else{
-        type_table[index_dans_tabID]= errX;
-        
-    }
-    printf("ADDED TYPE of %s , %d\n",tab_iden[index_dans_tabID],type_table[index_dans_tabID]); // Debugging w bara 
-}
-
-int compatible(int t1 , int t2){
-    if (t1 == t2){
-        return 1;
-    }
-    else if (t1 == integer && t2 == nb){
-        return 1;
-    }
-    else if (t1 == nb && t2 == integer){
-        return 1;
-    }
-    else{
-        return 0;
-    }
-}
-int chercher_type(char* variable){
-    int i = 0 ; 
-    while(i<c){
-        if (strcmp(tab_iden[i], variable)!=0){
-            i++;
-        }else{
-            if(type_table[i]==8){
-            printf("La variable %s est de type %s\n",tab_iden[i],"Integer");
-            return type_table[i];
-            }
-            else if (type_table[i] == 9){
-                printf("La variable %s est de type %s\n",tab_iden[i], "Char");
-                return type_table[i];
-            }
-            else{
-                printf("Variable Introuvable %s! EXIT FAILIRE!",tab_iden[i]);
-                exit(0);
-                return -1;
-                
-            }
-        }
-    }
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Partie  Lexical ///////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-void erreur(int T) // changement de fonction erreur 
-{
-    switch(T){
-    case(2): printf("point virgule manquant");break;
+is_wandering = False
+def click_daily():
     
-    case(4): printf("var manquant");break;
-    case(5): printf("deux points manquantes");break;
-    case(6): printf("id manquant");break;
-    case(7): printf("virgule manquante");break;
-    case(8): printf("integer manquant");break;
-    case(9): printf("char manquant");break;
-    case(10): printf("begin manquant");break;
-    case(11): printf("end manquant");break;
-    case(12): printf(":= manquant");break;
-    case(13): printf("if manquant");break;
-    case(14): printf("then manquant");break;
-    case(15): printf("else manquant");break;
-    case(16): printf("while manquant");break;
-    case(17): printf("do manquant");break;
-    case(18): printf("parenthese ouvrante manquante");break;
-    case(19): printf("parenthese fermante manquante");break;
-    case(3): printf("Erreur manque point!");break;
-    case(20): printf("write manquant");break;
-    case(21): printf("read manquant");break;
-    case(22): printf("writeln manquant");break;
-    case(23): printf("readln manquant");break;
-    case(24): printf("operation relationelle manquante");break;
-    case(25): printf("operation d/'addition manquante");break;
-    case(26): printf("operation de multiplication manquante");break;
-    case(27): printf("nb manquant");break;
-    case (28): printf("Or is wrong written;");break;
-    case (29): printf("And is wrong written!");break;
-    case (30): printf("VARIABLE INTROUVABLE !");break;
-    default: printf("erreur detecté de compliation");
-    }
-    exit(0);
+    screen_width, screen_height = pyautogui.size()
 
-}
-char carSuivant(){
-    return(fgetc(fs));
-    
-}
-void Reculer(int k)
-{fflush(stdout);
-    fseek(fs, -k, SEEK_CUR);
-} // Reculer le pointeur de k index
-void accepter(int T)
-{
-	if (sym==T) // si le symbol est accepte en passe l'autre
-	{   
-		sym=symbole_suivant();
-	}
-	else
-	{
-		erreur(T);
-	}
-} 
-int UniLexId()
-{
-    int k=0;
-    int i=0;
-    while (i<14&&(!k)) { // 3anna 14 mot clé dheka aaleh i<14 w variable k nestaamlouha bch nverifiw si l kelma (unite lex) mawjouda wla lé
-        if(strcmp(mot_cle[i],ch)== 0){
-            k=1;
-        }else{
-           i++;
-        }
-    }
-    if (k==1){
-        return id_mot_cle[i]; // une fois l9ina l mot clé , nraj3ou l ID te3ou yaani aka Define li aamlneha mlowel (btbi3thom ktebnehom mratbin nafes tartib f mot clé w id mot clé)
-    }
-    else {
-        return id; // ken kamlna boucle w mal9inech mot clé yaani base l kelma li 9rineha id (par exp var xaqs , 9rina xaqs li houwa id) donc we return 6
-    }
-}
+    # Calculate the center
+    center_x, center_y = screen_width // 2, screen_height // 2
 
-int RangerId(int k, int* c)                     // return l index where in memory l'UL te3na, w c mele5er heya index li wsolnelha for now f tableau
-                                                // also 3addina pointeur c lhné bch najmou nbadlou real value te3ha
-{
-    int index=0;                                      //index de parcours tab_iden et *c pointeur win wfé l array tab_iden e5er mara
-    if (k == id) {                                   // Ken lkelma li jetna ID nemchiw l aka tableau t3 les symboles w nhotou kelma li 9rineha ONLY KENHA MCH MAWJOUDA MN 9BAL 
-    while ((strcmp(tab_iden[index], ch) != 0) && (index < (*c)))
-        index++;
-    if (index < *c) {
-        //printf("Lkelma rahi deja mawjouda ! %s\n",tab_iden[index]); // HEDHOM RAHOM DEBUGGING NA7IWHOM NHAR L VALIDATION XD
-        return index;                               // Ken l id mawjoud mn 9bal just n returni l index te3ou f table de symboles
-    } else {                                        // mal9inech l id donc nzidouh fi e5er table de symbole , attribut taa l id bch ykoun houwa l index f table!
-        (*c)++;
-         strcpy(tab_iden[*c - 1], ch);
-        //printf("Rana zedna l kelma hedhi f tableau identificateurs %s\n",tab_iden[*c - 1]);
-         return *c - 1 ;                            // l'index f tableau de symboles (tableau d'identificateurs)
-    }}
+    # Move the mouse pointer to the center
+    pyautogui.moveTo(center_x, center_y)
 
-    
-    else{ // l'attribut t3 les mots clés mayhmnich barcha 5ater menich bch nsaljou f table de symbole najem nhot arbitraiement kenou mot clé rahou attribut par exp 1000
-       return 1000;
-        }
-}// variable index just staamlneha lil parcours (recherche)
+    print(f"Mouse moved to the center: ({center_x}, {center_y})")
 
+def start_league():
+    if os.path.isfile(shortcut_path):
+        try:
+            os.startfile(shortcut_path)
+            print("League of Legends client started.")
+            time.sleep(32)  # Adjust the sleep time based on your system
+        except Exception as e:
+            print(f"An error occurred: {e}")
+    else:
+        print(f"Shortcut file {shortcut_path} not found")
 
+def click_play():
+    print(f"Looking for image at: {play_image}")
+    if os.path.isfile(play_image):
+        while True:
+            try:
+                play_loc = pyautogui.locateCenterOnScreen(play_image, confidence=0.8)
+                if play_loc:
+                    pyautogui.click(play_loc)
+                    print("Play clicked")
+                    time.sleep(3)
+                    break
+                else:
+                    print("Play button not found on the screen, retrying...")
+                    time.sleep(1)
+            except ImageNotFoundException:
+                print("Play image not found, retrying...")
+                time.sleep(1)
+    else:
+        print(f"Image file {play_image} not found")
 
-int analyLex() {
-    int etat = 0;
-    char car;
-    int colonne = 0, ligne = 1;
-    while (1) {
-        
-        switch (etat) {
-            case 0:
-                car = carSuivant(); 
-                
-                if (car == ' ') {              
-                    colonne++;
-                    etat = 0;
-                } else if (car == '\n') {
-                    ligne++;
-                    colonne = 0;
-                    etat = 0;
-                } else if (car == '\t') {
-                    colonne += 3;
-                    etat = 0;
-                } else if (isalpha(car)) {
-                    z = 0;
-                    ch[0] = car;
-                    etat = 1;
-                } else if (isdigit(car)) {
-                    Reculer(1);
-                    etat = 3;
-                  
-                }
-                 else if (car == '<') {
-                    etat = 5;
-                } else if (car == '>') {
-                    etat = 10;
-                } else if (car == '=') {
-                    etat = 9;
-                } else if (car == '$') {
-                    etat = 13;
-                } else if (car == ';') {
-                    etat = 15;
-                } else if (car == ',') {
-                    etat = 16;
-                } else if (car == '(') {
-                    etat = 17;
-                } else if (car == ':') {
-                    etat = 18;
-                } else if (car == ')') {
-                    etat = 19;
-                }else if (car == '.'){
-                    etat = 20;
-                }else if (car == '|'){
-                    etat = 21;
-                }
-                else if (car == '&'){
-                    etat = 22;
-                }
-                else if (car == '+' || car == '-'){
-                    etat = 23;
-                }
-                else if (car == '%' || car == '/'){
-                    etat = 24;
-                }
-                else if (car == '*'){
-                    etat = 25;
-                }
-                
-                 else {
-                    etat = 14;
-                }
-                break;
-            case 1:
-                car = carSuivant();
-                if (isalpha(car) || isdigit(car)) {
-                    z++;
-                    ch[z] = car;
-                } else {
-                    etat = 2;
-                    ch[z + 1] = '\0';
-                    z = 0;
-                }
-                break;
-            case 2:
-                Reculer(1);
-                symbole.ul = UniLexId(); // Get the symbol ID
-                symbole.att = RangerId(symbole.ul, &c);
-                
-                 // attribut kima 9olna ken id rahou l index sinon rahou 1000 yaani mot clé (arbitraire 5tarneh )
-                // hedhom zednehom juste bch ndebugiw bihom 
-                
-                printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
-                return symbole.ul;
-            case 3:
-                
-                car = carSuivant();
-                if (isdigit(car)) {
-                    
-                    ch[z] = car;
-                    z++;
-                } else {
-                    
-                    etat = 4;
-                    ch[z] = '\0';
-                    z = 0;
-                }
-                break;
-            case 4:
-                
-                symbole.ul = nb;
-                symbole.att = atoi(ch); // hedhi une fois chla9na li 9rina nombre nconvertiwh l entier kima f C++ b atoi
-                
-                printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
-                
-                return symbole.ul;
-            case 5:
-                car = carSuivant();
-                switch (car) {
-                    case '=':
-                        etat = 6;
-                        break;
-                    case '>':
-                        etat = 7;
-                        break;
-                    default:
-                        etat = 8;
-                }
-                break;
-            case 9:
-                symbole.ul = oprel;
-                symbole.att = eq;
-                
-                printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
-                return symbole.ul;
-            case 10:
-                
-                car = carSuivant();
-                if (car == '=') {
-                    etat = 11;
-                } else {
-                    symbole.ul = oprel;
-                    symbole.att = bt;
-                    
-                    printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
-                    return symbole.ul;
-                }
-            case 11:
-                symbole.ul = oprel;
-                symbole.att = beq;
-                
-                //printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
-                return symbole.ul;
-            case 6:
-                symbole.ul = oprel;
-                symbole.att = leq;
-                
-                //printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
-                return symbole.ul;
-            case 7:
-                symbole.ul = oprel;
-                symbole.att = diff;
-                
-                //printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
-                return symbole.ul;
-            case 8:
-                Reculer(1);
-                symbole.ul = oprel;
-                symbole.att = lt;
-                
-                //printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
-                return symbole.ul;
-            case 12:
-                symbole.ul = oprel;
-                symbole.att = oprel;
-                
-                //printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
-                return symbole.ul;
-            case 13:
-                symbole.ul = 100;
-                symbole.att = 0;
-                
-                //printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
-                return symbole.ul;
-            case 14:
-                etat = 0;
-                break;
-            case 15:
-                symbole.ul = pv;
-                symbole.att = 0;
-                
-                //printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
-                return symbole.ul;
-            case 16:
-                symbole.ul = v;
-                symbole.att = 0;
-                
-                //printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
-                return symbole.ul;
-            case 17:
-                symbole.ul = po;
-                symbole.att = 0;
-                //printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
-                return symbole.ul;
-            case 18:
-                car = carSuivant();
-                if (car == '=') {
-                    symbole.ul = opaf;
-                    symbole.att = 0;
-                    //printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
-                    return symbole.ul;
-                } else {
-                    
-                    Reculer(1); 
-                    symbole.ul = dp;
-                    symbole.att = 0;
-                    
-                    printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
-                    return symbole.ul;
-                }
+def select_ak():
 
-            case 19:
-                symbole.ul = pf;
-                symbole.att = 0;
-                printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
-                return symbole.ul;
-            case 20:
-                    symbole.ul = p;
-                    symbole.att = 0;// un attribut arbitraire pour pt li deja 7atinehom lkol 0 b5lef jme3t l id w les mots clé
-                    printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
-                    return symbole.ul;
-
-
-            case 21:
-                car = carSuivant();
-                if(car == '|'){
-                    symbole.ul = opadd;
-                    symbole.att = or;
-                    printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
-                    return symbole.ul;
-                }
-                else{
-                    erreur(28);
-                }
-
-            case 22 : 
-                car = carSuivant();
-                if(car == '&'){
-                    symbole.ul = opmul;
-                    symbole.att  = and ; 
-                    printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
-                    return symbole.ul;
-                }
-                else{
-                    erreur(29);
-                }
-            case 23:
-                symbole.ul = opadd;
-
-                if(car == '+'){
-                    symbole.att = addi;
-                }
-                else{
-                    symbole.att = sous;
-                }
-                printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
-                return symbole.ul;
-
-            case 24:
-                symbole.ul = opmul;
-                if(car == '%'){
-                    symbole.att = modd;
-                }
-                else{
-                    symbole.att = divi;
-                }
-                printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
-                return symbole.ul;
-
-            case 25 : 
-                symbole.ul = opmul;
-                symbole.att = multi;
-                printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
-                return symbole.ul;    
-        }    
-
-    }
-}
-
-
-int symbole_suivant(){
-    return analyLex();
-} 
-// partie1///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void P()
-{
-    if(sym == 1) //verifie program
-    {
-        accepter(1); //passe au symbol suivant : id
-        
-        accepter(6); //verifie et passe au symbol suivant ;
-        
-        accepter(2); //;
-        
-        DCL(); //dcl
-        Inst_compose();//inst_compsoe
-        accepter(3); 
+            try:
+                free_loc = pyautogui.locateCenterOnScreen(free_im,confidence=0.9)
+                
  
-        
-    }
-    else
-    {
-        printf("Votre programme manque le mot Program ?... Compliation terminé ECHEC!!"); //afficher erreur
-    }
-}
-
-void DCL()
-{
-    D();
-}
-
-void D()
-{   counter = 0;
-    if(sym == var )
-    {
-        accepter(var);//var
+                if free_loc:
+                    pyautogui.click(free_loc)
+                    print("Free champ selected")    
+                    
+            except ImageNotFoundException:
+                print("image not found, retrying...")
                 
-        List_id(); //liste_id
+
+
+            try:
+                lock_loc = pyautogui.locateCenterOnScreen(lock_image, confidence=0.8)
+                if lock_loc:
+                    pyautogui.click(lock_loc)
+                    print("Lock icon clicked")
+                else:
+                    
+                    time.sleep(1)
+            except ImageNotFoundException:
+                time.sleep(0.2)
                 
-        accepter(5);//:
-        Type();
-        accepter(2);//;
-        printf("Counter %d\n",counter);
-        D();
-    }
-}
+                
 
-void List_id()
-{
-    if(sym == 6)
-    { 
-        counter++;
-        accepter(6);
-        L();
-    }
-    else
-    {
-        printf("id manquant");
-    }
-}
 
-void L()
-{
-    if(sym == 7)
-    {
-        accepter(7);
-        accepter(6);
-        counter++;
-        L();
-    }
-}
+def find_match():
+        while True:
+            print(f"Looking for image at: {find_match_image}")
+            try:
+                find_match_loc = pyautogui.locateCenterOnScreen(find_match_image, confidence=0.8)
+                if find_match_loc:
+                    pyautogui.click(find_match_loc)
+                    print("Find Match clicked")
+                    break
+                else:
+                    time.sleep(1)
+            except ImageNotFoundException:
+                
+                time.sleep(1)      
 
-void Type()
-{
-    if(sym == 8)
-    {
-        accepter(8);
-        for (int i = c-1;i>= c - counter ; i--){
-            ajouter_type(i,8);
-        }
-    }
-    else if(sym == 9)
-    {
-        accepter(9);
-            for (int i = c-1;i>= c - counter ; i--){
-            ajouter_type(i,9);
-        }
-    }
-}
 
-void Inst_compose()
-{
-    if (sym == begin)
-    {
-        accepter(begin);
-        Inst();
-        printf("finished\n");
-        accepter(end);
-        
-    }
-    else
-    {
-        printf("begin manquant");
-    }
-}
-
-void Inst()
-{
-    List_inst();
-}
-
-void List_inst()
-{
-    I();
-    L_I();
-}
-
-void L_I()
-{
-    if(sym == 2)
-    {
-        accepter(2);//pt virgule
-        I();
-        L_I();
-    }
-
-}
-
-void I()
-{
-    if (sym == 6)
-    {   char* var1 = ch;
-        
-        accepter(6);
-
-        int aziztype = chercher_type(var1);
-        accepter(12);
-        // FOR NEXT TIME TODO : RAHOU KI T9OUL ACCEPTER 12 RAHOU DEJA HOUWA 9RA L VARIABLE LI BA3DHA !!!! YAANI RAHOU DEJA 9RA EL Y IN OUR CASE , TIMING TA3 LES VARIABLES A CHANGER!!!
-        
-        int final_type = Exp_S();
-        int ayoub = compatible(aziztype,final_type);
-        if (ayoub == 0){
-            printf("Erreur de type ! ");
-            exit(0);
-        }
-        else{
-            printf("type is %d\n",final_type);
-        }
-        
-    }
-    else if(sym == 13)
-    {
-        accepter(13);
-        Exp();
-        accepter(14);
-        I();
-        accepter(15);
-        I();
-    }
-    else if(sym == 16)
-    {
-        accepter(16);
-        Exp();
-        accepter(17);
-        I();
-    }
-    else if(sym == 21)
-    {
-        accepter(21);
-        accepter(18);
-        accepter(6);
-        accepter(19);
-    }
-    else if (sym == 23)
-    {
-        accepter(23);
-        accepter(18);
-        accepter(6);
-        accepter(19);
-    }
-    else if(sym == 20)
-    {
-        accepter(20);
-        accepter(18);
-        accepter(6);
-        accepter(19);
-    }
-    else if(sym == 22)
-    {
-        accepter(22);
-        accepter(18);
-        accepter(6);
-        accepter(19);
-    }
-
-    else
-    {
-        printf("Syntaxe invalide");
-    }
-
-}
-
-void Exp()
-{   int typeq;
-    typeq = Exp_S();
-    S(typeq);
-}
-
-void S(int typeq)
-{   
-    if (sym == oprel){
-        accepter(oprel);
-        int typez = Exp_S();
-        int aziz6 = compatible(typez,typeq);
-        if(aziz6 == 0){
-            printf("Erreur_de_type\n");
-            exit(0);
-        }
-}
     
-}
+def select_bot_queue():
+    print(f"Looking for image at: {botQ_image}")
+    if os.path.isfile(botQ_image):
+        while True:
+            try:
+                botQ_loc = pyautogui.locateCenterOnScreen(botQ_image, confidence=0.8)
+                if botQ_loc:
+                    pyautogui.click(botQ_loc)
+                    print("Bot Queue clicked")
+                    time.sleep(3)
+                    break
+                else:
+                    
+                    time.sleep(1)
+            except ImageNotFoundException:
+                
+                time.sleep(1)
 
-int Exp_S()
-{   
-    int type6 = Terme();
-    E(type6);
-    return type6;
-}
+        print(f"Looking for image at: {noob_image}")
+        while True:
+            try:
+                noob_loc = pyautogui.locateCenterOnScreen(noob_image, confidence=0.8)
+                if noob_loc:
+                    pyautogui.click(noob_loc)
+                    time.sleep(3)
+                    break
+                else:
+                    
+                    time.sleep(1)
+            except ImageNotFoundException:
+                
+                time.sleep(1)
 
-void E(int type6)
-{
-    if(sym == opadd)
-    {
-        accepter(opadd);
-        int typeh = Terme();
-        int aziz1 = compatible(type6,typeh);
-        if(aziz1 == 0){
-            printf("Erreur_de_type!\n");
-            exit(0);
-        }
+        print(f"Looking for image at: {confirm_image}")
+        while True:
+            try:
+                confirm_loc = pyautogui.locateCenterOnScreen(confirm_image, confidence=0.8)
+                if confirm_loc:
+                    pyautogui.click(confirm_loc)
+                    print("Confirmation clicked")
+                    time.sleep(3)
+                    break
+                else:
+                
+                    time.sleep(1)
+            except ImageNotFoundException:
+                
+                time.sleep(1)
+
+
+def accept_match():  
+        try:
+            accept_loc = pyautogui.locateCenterOnScreen(accept_image, confidence=0.8)
+            if accept_loc:
+                pyautogui.click(accept_loc)
+                print("Match Accepted")
+                time.sleep(1)
+            else:
+            
+                time.sleep(1)
+        except ImageNotFoundException:
+            
+            time.sleep(1)
+
+def game_loading():
+        try:
+            location = pyautogui.locateCenterOnScreen(gold_image, confidence=0.8)
+            if location:
+                print("Game Loaded!")
+                time.sleep(1)
+                return True
+            else:
+                
+                return False
+        except ImageNotFoundException:
+            
+            return False
+              
+
+def inqueue():
+    try:
+        inqloc = pyautogui.locateCenterOnScreen(inQ_im, confidence=0.8)
+        if inqloc:
+            return True
+        else :
+            return False
+    except Exception as e:
         
-        E(type6);
-    }
-}
+        return False  
 
-int Terme()
-{   int typex;
-    typex = Facteur();
-    T(typex);
-    return typex;
-}
-
-void T(int typex)
-{
-    if (sym == opmul)
-    {
-        accepter(opmul);
-        int type2 = Facteur();
-        int aziz = compatible(typex,type2);
-        if(aziz == 0){
-            printf("Erreur de type!\n");
-            exit(0);
-        }
-        
-        T(typex);
-    }
-}
-
-int Facteur()
-{
-    if(sym == 6)
-    {   int type1;
-        char* var2 = ch;
-        type1 = chercher_type(var2);
-        printf("Le type de %s est %d\n",var2,type1);
-        accepter(6);
-        return type1;
-
-    }
-    else if( sym == 27)
-    {   
-        accepter(27);
-        return 27;
-    }
-    else if(sym == 18)
-    {
-        accepter(18);
-        int u = Exp_S();
-        accepter(19);
-    }
-}
+def buy_smite():
+    keyboard.press('p')
+    keyboard.release('p')
+    time.sleep(1)
+    
+    print(f"Looking for image at: {red_smite_image}")
+    while True:
+        try:
+            smite_loc = pyautogui.locateCenterOnScreen(red_smite_image, confidence=0.8)
+            if smite_loc:
+                pyautogui.click(smite_loc, button='right')
+                pyautogui.click(smite_loc, button='right')
+                print("Red Smite Item bought")
+                time.sleep(0.2)
+                break
+            else:
+                
+                time.sleep(1)
+        except ImageNotFoundException:
+            
+            time.sleep(1)
+    
+    keyboard.press('p')
+    keyboard.release('p')
+    keyboard.press('y')
+    keyboard.release('y')
+    pyautogui.click(smite_loc,button='right')
+    print("Shop closed")
 
 
 
+def wander():
+    screen_width, screen_height = pyautogui.size()  # Get screen resolution
+    # Generate random coordinates within screen bounds
+    right_side_start_x = screen_width // 2  # Start from the middle of the screen
+    x = random.randint(right_side_start_x, screen_width - 100)
+    y = random.randint(0, screen_height - 100)
+    # Move to the random coordinates and perform a right-click
+    pyautogui.moveTo(x, y, duration=1)  # Smooth movement over 1 second
+    keyboard.press(Key.space)
+    keyboard.release(Key.space)
+    print(f"Moved to ({x}, {y}) and right-clicked")
+    time.sleep(1)
+
+def levelup():
+    try:
+        levelup_loc = pyautogui.locateCenterOnScreen(levelup_image, confidence=0.8)
+        if levelup_loc:
+            pyautogui.click(levelup_loc)  
+        else:
+            print("No level up available")
+    except ImageNotFoundException:
+        print("No image found for leveling up")
+    
+
+def nextgame():
+    while True:
+     try:
+        next_loc = pyautogui.locateCenterOnScreen(next_game_image, confidence=0.8)
+        if next_loc:
+            pyautogui.click(next_loc)
+            time.sleep(2.3)
+            pyautogui.click(next_loc)
+            time.sleep(2.3)
+
+            break  
+        else:
+            print("Next game button not found")
+     except ImageNotFoundException:
+        print("Retrying to find continue picture")
+
+def gamefinish():
+    try:
+        cont_loc = pyautogui.locateCenterOnScreen(cont_image, confidence=0.8)
+        if cont_loc:
+            
+            return True
+        else:
+            return False
+    except Exception as e:
+        print(f"Game didnt finish yet")
+        return False
+def main():
+    start_league()
+    print("Please wait 32 Seconds for loading :D")
+    click_play()
+    select_bot_queue()
+    find_match()
+    
+    while True:
+            # Continuously monitor and accept matches if in queue
+            while inqueue():
+                accept_match()
+                
+            # Once out of queue, proceed with game actions
+            select_ak()
+            if game_loading():
+                #buy_smite()
+                while not gamefinish():
+                  wander()
+                  time.sleep(5)
+                time.sleep(45)  
+                levelup()
+                time.sleep(1)
+                levelup()
+                time.sleep(1)
+                detect_daily()
+                nextgame()
+                find_match()
+
+            else:
+                print("Game didnt start")    
+                
 
 
 
-
-
-// Partie test
-
-int main()
-{int x ;
-    fs = fopen("pascallikecoded.txt","rt");
-    //fd = fopen("codeInterm.txt","wt"); voir commantaire sur emettre
-    sym = analyLex();
-    P();
-        printf("Programme a bien complie !");
-        scanf("%d",&x);
-    fclose(fs);
-    //fclose(fd);
-    return 0;
-}
-
+if __name__ == "__main__":
+    main()
