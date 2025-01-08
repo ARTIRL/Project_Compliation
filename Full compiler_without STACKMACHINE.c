@@ -60,8 +60,8 @@ int counter = 0;
 
 
 typedef struct unitelex { //Unite lexical defini par ul w att
-    int ul;
-    int att; //indexation in case ID w lo5rin type or 7aja arbitraire.
+    int ul; // hedha l attribut en general yaani chnya bch ykoun par exp oparith wl att bch ykoun specification par exp + wla - etc
+    int att; //indexation in case ID w lo5rin type or 7aja arbitraire. Par exp nestaamlouha ki yabda aana OPrel w operel yabda < nweliw nspecifiw houni lt 35
 }unitelex;
 
 
@@ -79,7 +79,7 @@ char mot_cle[20][20]={"program", "begin", "var",
 
 
 int id_mot_cle[16]={1,10,4,8,9,11,14,13,15,21,23,20,22,17,16}; // hedhom les defines taa les mots clé b tartib (program 1 , begin 10 etc ....)
-char tab_iden[100][20]; // tableau des identificateurs
+char tab_iden[100][20]; // tableau des identificateurs les variables bsifa 3ama 
 
 
 
@@ -143,8 +143,8 @@ void emettre(char* cha){
     FILE* fd;
     fd = fopen("codeInterm.txt","a+"); 
     if (fd != NULL) {
-        printf("%s\n", cha); // On ecrit avec cette ligne sur le "fichier codeInterm.txt"
-        fprintf(fd, "%s\n", cha); // On ecrit avec cette ligne sur le "fichier codeInterm.txt"
+        //printf("%s\n", cha); 
+        fprintf(fd, "%s\n", cha);
         
     } else {
         fprintf(stderr, "Erreur : Impossible d'ouvrir le fichier 'codeInterm.txt'\n");
@@ -167,20 +167,31 @@ void ajouter_type(int index_dans_tabID , int tp){
         type_table[index_dans_tabID]= errX;
         
     }
-    //printf("ADDED TYPE of %s , %d\n",tab_iden[index_dans_tabID],type_table[index_dans_tabID]); // Debugging w bara 
+    printf("On a ajoute la variable %s , de type %d\n",tab_iden[index_dans_tabID],type_table[index_dans_tabID]); // Debugging w bara 
 }
 
 int compatible(int t1 , int t2){
+
+
     if (t1 == t2){
+        if(t1==9){
+            printf("On va tester la compatibilite entre Char et Char\n");
+        }
+        else{
+            printf("On va tester la compatibilite entre Integer et Integer\n");
+        }
         return 1;
     }
     else if (t1 == integer && t2 == nb){
+        printf("On va tester la compatibilite entre Integer et Nombre\n");
         return 1;
     }
     else if (t1 == nb && t2 == integer){
+        printf("On va tester la compatibilite entre Integer et Nombre\n");
         return 1;
     }
     else{
+        printf("Erreur de type ! Comparaison entre integer et char\n");
         return 0;
     }
 }
@@ -191,15 +202,15 @@ int chercher_type(char* variable){
             i++;
         }else{
             if(type_table[i]==8){
-            //printf("La variable %s est de type %s\n",tab_iden[i],"Integer");
+            printf("La variable %s est de type %s\n",tab_iden[i],"Integer");
             return type_table[i];
             }
             else if (type_table[i] == 9){
-                //printf("La variable %s est de type %s\n",tab_iden[i], "Char");
+                printf("La variable %s est de type %s\n",tab_iden[i], "Char");
                 return type_table[i];
             }
             else{
-                //printf("Variable Introuvable %s! EXIT FAILIRE!",tab_iden[i]);
+                printf("Variable Introuvable %s! EXIT FAILIRE!",tab_iden[i]);
                 exit(0);
                 return -1;
                 
@@ -254,7 +265,7 @@ char carSuivant(){
     
 }
 void Reculer(int k)
-{fflush(stdout);
+{
     fseek(fs, -k, SEEK_CUR);
 } // Reculer le pointeur de k index
 void accepter(int T)
@@ -295,12 +306,12 @@ int RangerId(int k, int* c)                     // return l index where in memor
     while ((strcmp(tab_iden[index], ch) != 0) && (index < (*c)))
         index++;
     if (index < *c) {
-        //printf("Lkelma rahi deja mawjouda ! %s\n",tab_iden[index]); // HEDHOM RAHOM DEBUGGING NA7IWHOM NHAR L VALIDATION XD
+        //printf("Lkelma rahi deja mawjouda ! %s\n",tab_iden[index]); // HEDHOM RAHOM DEBUGGING 
         return index;                               // Ken l id mawjoud mn 9bal just n returni l index te3ou f table de symboles
     } else {                                        // mal9inech l id donc nzidouh fi e5er table de symbole , attribut taa l id bch ykoun houwa l index f table!
         (*c)++;
          strcpy(tab_iden[*c - 1], ch);
-        //printf("Rana zedna l kelma hedhi f tableau identificateurs %s\n",tab_iden[*c - 1]);
+        //printf("Rana zedna l kelma hedhi f tableau identificateurs %s\n",tab_iden[*c - 1]); // debugging w khw
          return *c - 1 ;                            // l'index f tableau de symboles (tableau d'identificateurs)
     }}
 
@@ -420,7 +431,7 @@ int analyLex() {
                  // attribut kima 9olna ken id rahou l index sinon rahou 1000 yaani mot clé (arbitraire 5tarneh )
                 // hedhom zednehom juste bch ndebugiw bihom 
                 
-                //printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
+                printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                 return symbole.ul;
             case 3:
                 
@@ -441,7 +452,7 @@ int analyLex() {
                 symbole.ul = nb;
                 symbole.att = atoi(ch); // hedhi une fois chla9na li 9rina nombre nconvertiwh l entier kima f C++ b atoi
                 
-                //printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
+                printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                 
                 return symbole.ul;
             case 5:
@@ -461,7 +472,7 @@ int analyLex() {
                 symbole.ul = oprel;
                 symbole.att = eq;
                 
-                //printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
+                printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                 return symbole.ul;
             case 10:
                 
@@ -472,45 +483,45 @@ int analyLex() {
                     symbole.ul = oprel;
                     symbole.att = bt;
                     
-                    //printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
+                    printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                     return symbole.ul;
                 }
             case 11:
                 symbole.ul = oprel;
                 symbole.att = beq;
                 
-                //printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
+                printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                 return symbole.ul;
             case 6:
                 symbole.ul = oprel;
                 symbole.att = leq;
                 
-                //printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
+                printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                 return symbole.ul;
             case 7:
                 symbole.ul = oprel;
                 symbole.att = diff;
                 
-                //printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
+                printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                 return symbole.ul;
             case 8:
                 Reculer(1);
                 symbole.ul = oprel;
                 symbole.att = lt;
                 
-                //printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
+                printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                 return symbole.ul;
             case 12:
                 symbole.ul = oprel;
                 symbole.att = oprel;
             
-                //printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
+                printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                 return symbole.ul;
             case 13:
                 symbole.ul = 100;
                 symbole.att = 0;
                 
-                //printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
+                printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                 return symbole.ul;
             case 14:
                 etat = 0;
@@ -519,25 +530,25 @@ int analyLex() {
                 symbole.ul = pv;
                 symbole.att = 0;
                 
-                //printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
+                printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                 return symbole.ul;
             case 16:
                 symbole.ul = v;
                 symbole.att = 0;
                 
-           //     printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
+                printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                 return symbole.ul;
             case 17:
                 symbole.ul = po;
                 symbole.att = 0;
-             //   printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
+                printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                 return symbole.ul;
             case 18:
                 car = carSuivant();
                 if (car == '=') {
                     symbole.ul = opaf;
                     symbole.att = 0;
-               //     printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
+                   printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                     return symbole.ul;
                 } else {
                     
@@ -545,19 +556,19 @@ int analyLex() {
                     symbole.ul = dp;
                     symbole.att = 0;
                     
-                 //   printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
+                   printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                     return symbole.ul;
                 }
 
             case 19:
                 symbole.ul = pf;
                 symbole.att = 0;
-                //printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
+                printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                 return symbole.ul;
             case 20:
                     symbole.ul = p;
                     symbole.att = 0;// un attribut arbitraire pour pt li deja 7atinehom lkol 0 b5lef jme3t l id w les mots clé
-                  //  printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
+                    printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                     return symbole.ul;
 
 
@@ -566,7 +577,7 @@ int analyLex() {
                 if(car == '|'){
                     symbole.ul = opadd;
                     symbole.att = or;
-                //    printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
+                    printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                     return symbole.ul;
                 }
                 else{
@@ -578,7 +589,7 @@ int analyLex() {
                 if(car == '&'){
                     symbole.ul = opmul;
                     symbole.att  = and ; 
-                  //  printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
+                    printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                     return symbole.ul;
                 }
                 else{
@@ -593,7 +604,7 @@ int analyLex() {
                 else{
                     symbole.att = sous;
                 }
-                //printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
+                printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                 return symbole.ul;
 
             case 24:
@@ -604,13 +615,13 @@ int analyLex() {
                 else{
                     symbole.att = divi;
                 }
-                //printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
+                printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                 return symbole.ul;
 
             case 25 : 
                 symbole.ul = opmul;
                 symbole.att = multi;
-                //printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
+                printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                 return symbole.ul;    
         }    
 
@@ -753,7 +764,7 @@ char *strconcatChaine (const char *chaine1, const char *chaine2) {
     size_t lenTotal = len1 + len2 + 1;
     char *result = (char *)malloc(lenTotal);
     if (result == NULL) {
-        perror("Erreur lors de l'allocation de m�moire");
+        perror("Erreur lors de l'allocation de memoire");
         exit(EXIT_FAILURE);
     }
     strcpy(result, chaine1);
@@ -818,8 +829,12 @@ void I()
             exit(0);
         }
         else{
-            //printf("type is %d\n",final_type);
-        }
+            if(I_type == 8){
+                printf("Le type final est integer, compatiblite verfie!\n");
+            }
+            else if(I_type == 9){
+                printf("Le type final est char, compatiblite verfie!\n");
+        }}
         emettre(":=");
     }
     else if(sym == iff)
@@ -848,7 +863,6 @@ void I()
         Exp();
         emettre(allersifaux(sortie));
         accepter(doo);
-
         I();
         emettre(allera(test));
         emettre(elsortie(sortie)); //etiqsortie
@@ -972,7 +986,6 @@ int Facteur()
     {   int type1;
         char* var2 = ch;
         type1 = chercher_type(var2);
-        //printf("Le type de %s est %d\n",var2,type1);
         emettre(valeurd(var2));
         accepter(6);
         return type1;
@@ -993,158 +1006,12 @@ int Facteur()
 }
 
 
-//La Partie qui concerne les fonctions de pile sont ecrit a part et non implementé dans la phase de test.
-
-// Partie fonctions de pile 
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-typedef struct {
-    int elements[50];
-    int sommet;
-} Pile;
-
-// Créer une nouvelle pile
-Pile* creer_pile() {
-    Pile* stack = (Pile*)malloc(sizeof(Pile));
-    if (stack != NULL) {
-        stack->sommet = -1;
-    }
-    return stack;
-}
-
-// Vérifier si la pile est vide
-int est_vide(Pile* stack) {
-    return stack->sommet == -1;
-}
-
-// Vérifier si la pile est pleine
-int est_pleine(Pile* stack) {
-    return stack->sommet == 50 - 1;
-}
-
-// Empiler une valeur
-void empiler_real_stack(Pile* stack, int valeur) {
-    if (!est_pleine(stack)) {
-        stack->elements[++stack->sommet] = valeur;
-        printf("Empilé: %d\n", valeur);
-    } else {
-        printf("Pile pleine!\n");
-    }
-}
-
-// Dépiler une valeur
-int depiler(Pile* stack) {
-    if (!est_vide(stack)) {
-        return stack->elements[stack->sommet--];
-    }
-    printf("Pile vide!\n");
-    return -1;
-}
-
-// Consulter le sommet
-int sommet(Pile* stack) {
-    if (!est_vide(stack)) {
-        return stack->elements[stack->sommet];
-    }
-    printf("Pile vide!\n");
-    return -1;
-}
 
 
 
-//fonction copier
-void copier(Pile* stack) {
-    if (!est_vide(stack)) {
-        int valeur = sommet(stack);
-        empiler_real_stack(stack, valeur);
-        printf("Copié: %d\n", valeur);
-    } else {
-        printf("Pile vide!\n");
-    }
-}
-
-//fonction *
-void multiplier(Pile* stack) {
-    if (stack->sommet >= 1) {  // Besoin d'au moins deux éléments
-        int a = depiler(stack);
-        int b = depiler(stack);
-        depiler(stack);// on enleve le signe *
-        empiler_real_stack(stack, a * b);
-        printf("Multiplication: %d * %d = %d\n", b, a, a * b);
-    } else {
-        printf("Pas assez d'éléments pour multiplier!\n");
-    }
-}
-
-//fonction +
-void additionner(Pile* stack) {
-    if (stack->sommet >= 1) {  // Besoin d'au moins deux éléments
-        int a = depiler(stack);
-        int b = depiler(stack);
-        depiler(stack);// on enleve le signe +
-        empiler_real_stack(stack, a + b);
-        printf("Addition: %d + %d = %d\n", b, a, a + b);
-    } else {
-        printf("Pas assez d'éléments pour additionner!\n");
-    }
-}
-
-// Définir une étiquette
-void etiq(char* nom) {
-    printf("Étiquette définie : %s\n", nom);
-}
-
-// fonction :=
-void affectation(Pile* stack) {
-    if (stack->sommet >= 1) {  // Besoin d'au moins deux éléments
-        int valeur = depiler(stack);
-        int* adresse = (int*)depiler(stack);  // On suppose que c'est une adresse
-        *adresse = valeur;
-        printf("Affectation : %d placé à l'adresse %p\n", valeur, (void*)adresse);
-    } else {
-        printf("Pas assez d'éléments pour affecter!\n");
-    }
-}
-void comparer_si_sup(Pile* stack) {
-    if (stack->sommet >= 1) {
-        int a = depiler(stack);
-        int b = depiler(stack);
-        empiler_real_stack(stack, b > a ? 1 : 0);
-        printf("Comparer-si-sup: %d > %d = %d\n", b, a, b > a ? 1 : 0);
-    } else {
-        printf("Pas assez d'éléments pour comparer!\n");
-    }
-}
-
-// Comparer si inférieur
-void comparer_si_inf(Pile* stack) {
-    if (stack->sommet >= 1) {
-        int a = depiler(stack);
-        int b = depiler(stack);
-        depiler(stack);// on enleve le signe <  
-        empiler_real_stack(stack, b < a ? 1 : 0);
-        printf("Comparer-si-inf: %d < %d = %d\n", b, a, b < a ? 1 : 0);
-    } else {
-        printf("Pas assez d'éléments pour comparer!\n");
-    }
-}
-
-// Comparer si égal
-void comparer_si_egal(Pile* stack) {
-    if (stack->sommet >= 1) {
-        int a = depiler(stack);
-        int b = depiler(stack);
-        depiler(stack);// on enleve le signe ==
-        empiler_real_stack(stack, b == a ? 1 : 0);
-        printf("Comparer-si-égal: %d == %d = %d\n", b, a, b == a ? 1 : 0);
-    } else {
-        printf("Pas assez d'éléments pour comparer!\n");
-    }
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-// LA PARTIE MACHINE A PILE NEST PAS IMPLEMENTE EN TEST , SEUELENT LES FONCTIONS DU COURS SONT IMPLEMENTEES
+
 // Partie test
 
 int main()
@@ -1154,7 +1021,7 @@ int main()
     
     sym = analyLex();
     P();
-        printf("Programme a bien complie !");
+        printf("\nProgramme a bien complie ! , pousser une touche pour fermer le terminal");
         scanf("%d",&x);
     fclose(fs);
     
