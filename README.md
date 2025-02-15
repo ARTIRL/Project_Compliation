@@ -73,10 +73,3 @@ The program will print out details of the following:
 - Semantic analysis (error checking)
 - Intermediate code in `codeInterm`
 
-## Contributing
-
-Feel free to fork the repository, open issues, or submit pull requests. If you would like to improve or expand the functionality of the parser or add support for more languages, please submit a pull request.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
