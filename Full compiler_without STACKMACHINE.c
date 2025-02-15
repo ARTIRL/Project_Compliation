@@ -13,8 +13,7 @@ int if_counter = 0;
 
 
 int counter = 0;
-// Hedha aka tableau li f classe aamlneh w zedlenou l ne9s kima program w ghirou
-// Zedna E zeyda fl while w else bch yod5olch baaadhou maa syntaxe t3 C w if zeda; lbe9i mrigel
+
 
 #define program 1
 #define pv 2 // point virgule
@@ -59,9 +58,9 @@ int counter = 0;
 #define errX 41
 
 
-typedef struct unitelex { //Unite lexical defini par ul w att
-    int ul; // hedha l attribut en general yaani chnya bch ykoun par exp oparith wl att bch ykoun specification par exp + wla - etc
-    int att; //indexation in case ID w lo5rin type or 7aja arbitraire. Par exp nestaamlouha ki yabda aana OPrel w operel yabda < nweliw nspecifiw houni lt 35
+typedef struct unitelex {
+    int ul; 
+    int att; 
 }unitelex;
 
 
@@ -69,21 +68,21 @@ typedef struct unitelex { //Unite lexical defini par ul w att
 
 
 
-int type_table[20]; // hedhi bch ykoun fiha les types ta3 les variables(with indexation) par exp if we have [x,y,z] tq x,y int w z char , type_table=[integer,integer,char]
+int type_table[20]; 
 
 char mot_cle[20][20]={"program", "begin", "var",
 "integer", "char", "end", "then", "if", "else", "read",
-"readln", "write", "writeln", "do", "while"};//tableau ta3 les mots clés
+"readln", "write", "writeln", "do", "while"};
 
 
 
 
-int id_mot_cle[16]={1,10,4,8,9,11,14,13,15,21,23,20,22,17,16}; // hedhom les defines taa les mots clé b tartib (program 1 , begin 10 etc ....)
-char tab_iden[100][20]; // tableau des identificateurs les variables bsifa 3ama 
+int id_mot_cle[16]={1,10,4,8,9,11,14,13,15,21,23,20,22,17,16}; 
+char tab_iden[100][20];
 
 
 
-// Les fonctions taa l partie 2 analex
+
 int symbole_suivant();
 void erreur(int T);
 void accepter(int T);
@@ -150,9 +149,9 @@ void emettre(char* cha){
         fprintf(stderr, "Erreur : Impossible d'ouvrir le fichier 'codeInterm.txt'\n");
     }
     fclose(fd);
-}// hedhi fonction nestaamlouha ken n7ebou nektbou fi ficher l output but we will write it on terminal ashel
+}
 
-//Partie Semantique 
+
 
 void ajouter_type(int index_dans_tabID , int tp){
     if(tp == integer){
@@ -167,7 +166,7 @@ void ajouter_type(int index_dans_tabID , int tp){
         type_table[index_dans_tabID]= errX;
         
     }
-    printf("On a ajoute la variable %s , de type %d\n",tab_iden[index_dans_tabID],type_table[index_dans_tabID]); // Debugging w bara 
+    printf("On a ajoute la variable %s , de type %d\n",tab_iden[index_dans_tabID],type_table[index_dans_tabID]); 
 }
 
 int compatible(int t1 , int t2){
@@ -298,28 +297,28 @@ int UniLexId()
     }
 }
 
-int RangerId(int k, int* c)                     // return l index where in memory l'UL te3na, w c mele5er heya index li wsolnelha for now f tableau
-                                                // also 3addina pointeur c lhné bch najmou nbadlou real value te3ha
+int RangerId(int k, int* c)                  
+                                            
 {
-    int index=0;                                      //index de parcours tab_iden et *c pointeur win wfé l array tab_iden e5er mara
-    if (k == id) {                                   // Ken lkelma li jetna ID nemchiw l aka tableau t3 les symboles w nhotou kelma li 9rineha ONLY KENHA MCH MAWJOUDA MN 9BAL 
+    int index=0;                                    
+    if (k == id) {                                  
     while ((strcmp(tab_iden[index], ch) != 0) && (index < (*c)))
         index++;
     if (index < *c) {
-        //printf("Lkelma rahi deja mawjouda ! %s\n",tab_iden[index]); // HEDHOM RAHOM DEBUGGING 
-        return index;                               // Ken l id mawjoud mn 9bal just n returni l index te3ou f table de symboles
-    } else {                                        // mal9inech l id donc nzidouh fi e5er table de symbole , attribut taa l id bch ykoun houwa l index f table!
+        //printf("Lkelma rahi deja mawjouda ! %s\n",tab_iden[index]); // DEBUGGING 
+        return index;                               
+    } else {                                     
         (*c)++;
          strcpy(tab_iden[*c - 1], ch);
-        //printf("Rana zedna l kelma hedhi f tableau identificateurs %s\n",tab_iden[*c - 1]); // debugging w khw
-         return *c - 1 ;                            // l'index f tableau de symboles (tableau d'identificateurs)
+        //printf("Rana zedna l kelma hedhi f tableau identificateurs %s\n",tab_iden[*c - 1]); // debugging 
+         return *c - 1 ;                          
     }}
 
     
-    else{ // l'attribut t3 les mots clés mayhmnich barcha 5ater menich bch nsaljou f table de symbole najem nhot arbitraiement kenou mot clé rahou attribut par exp 1000
+    else{ 
        return 1000;
         }
-}// variable index just staamlneha lil parcours (recherche)
+}
 
 
 char* return_current_op(){
@@ -425,12 +424,9 @@ int analyLex() {
                 break;
             case 2:
                 Reculer(1);
-                symbole.ul = UniLexId(); // Get the symbol ID
+                symbole.ul = UniLexId(); 
                 symbole.att = RangerId(symbole.ul, &c);
-                
-                 // attribut kima 9olna ken id rahou l index sinon rahou 1000 yaani mot clé (arbitraire 5tarneh )
-                // hedhom zednehom juste bch ndebugiw bihom 
-                
+
                 printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                 return symbole.ul;
             case 3:
@@ -450,7 +446,7 @@ int analyLex() {
             case 4:
                 
                 symbole.ul = nb;
-                symbole.att = atoi(ch); // hedhi une fois chla9na li 9rina nombre nconvertiwh l entier kima f C++ b atoi
+                symbole.att = atoi(ch); 
                 
                 printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                 
@@ -567,7 +563,7 @@ int analyLex() {
                 return symbole.ul;
             case 20:
                     symbole.ul = p;
-                    symbole.att = 0;// un attribut arbitraire pour pt li deja 7atinehom lkol 0 b5lef jme3t l id w les mots clé
+                    symbole.att = 0;
                     printf("Symbol: %d, Attribute: %d\n", symbole.ul, symbole.att);
                     return symbole.ul;
 
@@ -639,7 +635,7 @@ void P()
     {
         accepter(1); //passe au symbol suivant : id
         
-        accepter(6); //verifie et passe au symbol suivant ;
+        accepter(6); 
         
         accepter(2); //;
         
