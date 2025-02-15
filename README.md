@@ -1,78 +1,82 @@
-Pascal-Like Compiler in C
 
-📌 Project Overview
+# Lexical, Semantic, Syntaxic Parser & Translator for Pascal-like Code
 
-This project is a compiler for a Pascal-like language, implemented in C. It was developed as part of a class project .The compiler performs the following tasks within a single C program:
+## Description
 
-Lexical Analysis
+This project is a **Lexical, Semantic, Syntaxic Parser** and **Code Translator** for Pascal-like programming languages. It is written in **C** and designed to process code written in a syntax similar to Pascal, parse it, perform semantic checks, generate an intermediate code representation, and produce a detailed output of the parsing process.
 
-Syntax Analysis
+The program translates the provided Pascal-like code into an intermediary representation, allowing you to see the steps of lexical analysis, semantic analysis, and syntax parsing.
 
-Semantic Analysis
+## Features
 
-Code Translation
+- **Lexical Analysis**: Tokenizes the input code, breaking it down into basic language elements (keywords, operators, identifiers, etc.).
+- **Semantic Analysis**: Checks for logical errors or inconsistencies in the code.
+- **Syntax Analysis**: Verifies the structure of the code according to the defined grammar of the Pascal-like language.
+- **Intermediate Code Generation**: Produces an intermediate representation (`codeInterm`) from the input code.
+- **Comprehensive Output**: Provides a full output of parsing, including the lexical, semantic, and syntax analysis stages.
 
-🚀 Features
+## Requirements
 
-Tokenization of Pascal-like code.
+- **C Compiler** (e.g., GCC)
+- **Pascal-like Source Code** (filename: `pascallikecoded`)
 
-Parsing and syntax validation.
+## Installation
 
-Semantic checks for variable declarations, type checking, and scope validation.
+1. Clone this repository or download the source code files.
+   
+   ```bash
+   git clone https://github.com/ARTIRL/Project_Compliation
+   ```
 
-Translation of Pascal-like code to an intermediate or target language.
+2. Make sure you have a working C compiler (e.g., GCC) installed on your system.
 
-Error handling with meaningful messages.
+3. Compile the program using the C compiler.
 
-🛠️ Installation & Usage
+   ```bash
+   gcc -o parser parser.c
+   ```
 
-Prerequisites
+## Usage
 
-Ensure you have a C compiler installed, such as GCC.
+To run the parser and get the detailed output, follow these steps:
 
-Compilation
+1. Ensure you have a **Pascal-like source file** named `pascallikecoded` in the same directory as the program.
 
-gcc -o compiler compiler.c -lm
+2. Run the compiled program with the following command:
 
-Running the Compiler
+   ```bash
+   ./parser pascallikecoded
+   ```
 
-./compiler pascalikecoded
+3. The program will generate the following:
 
-Example Input (Pascal-like Code)
+   - **Parsing Output**: A step-by-step breakdown of the lexical, semantic, and syntax analysis.
+   - **Intermediate Code**: The program will create an intermediate code file (`codeInterm`), which represents the internal structure of the code.
 
-program Example;
+## Example
+
+### Input (pascallikecoded)
+
+```pascal
+program Hello;
 begin
-    writeln('Hello, World!');
+   writeln('Hello, World!');
 end.
+```
 
-Example Output
+### Output
 
-Parsing successful!
-Generating translated code...
-Output stored in codeInterm.
+The program will print out details of the following:
 
-📂 Project Structure
+- Lexical analysis (tokens detected)
+- Syntax parsing (grammar validation)
+- Semantic analysis (error checking)
+- Intermediate code in `codeInterm`
 
-├── compiler.c
-├── pascalikecoded
-├── codeInterm
-├── README.md
+## Contributing
 
-📌 Future Improvements
+Feel free to fork the repository, open issues, or submit pull requests. If you would like to improve or expand the functionality of the parser or add support for more languages, please submit a pull request.
 
-Support for more Pascal constructs.
+## License
 
-Optimization in generated code.
-
-Better error reporting with precise locations.
-
-GUI or web interface for easier usage.
-
-📜 License
-
-This project is for educational purposes. Feel free to use or modify it.
-
-✨ Acknowledgments
-
-Special thanks to my professor and classmates for their guidance and feedback throughout the project.
-
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
