@@ -5,7 +5,6 @@
 int c = 0; // awel index f tableau taa symboles
 
 // Projet Ayoub Hammami Med Aziz Rebhi II2C PARTIE 1 ET 2 AVEC TEST IN MAIN
-//La Partie qui concerne les fonctions de pile sont ecrit a part et non implementé dans la phase de test.
 //Ce code comporte la partie syntaxique,semantique,lexicale,et trdaucterur de code intermediaire qui tous fonctionnent correctement, la partie de la pile est ecrit(les fonctions de cours sont tous implementé) a part et non implementé dans la phase de teste
 
 
