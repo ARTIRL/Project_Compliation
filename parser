@@ -2,10 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-int c = 0; // awel index f tableau taa symboles
+int c = 0; 
 
-// Projet Ayoub Hammami Med Aziz Rebhi II2C PARTIE 1 ET 2 AVEC TEST IN MAIN
-//Ce code comporte la partie syntaxique,semantique,lexicale,et trdaucterur de code intermediaire qui tous fonctionnent correctement, la partie de la pile est ecrit(les fonctions de cours sont tous implementé) a part et non implementé dans la phase de teste
 
 
 int if_counter = 0;
@@ -41,14 +39,14 @@ int counter = 0;
 #define opadd 25
 #define opmul 26
 #define nb 27
-#define and 28 // hedhom des attributs zeydin f OPMUL OPADD OPAFF khw!!!!
+#define and 28 
 #define or 29
 #define addi 30  
 #define modd 31
 #define divi 32
 #define sous 33
 #define multi 34
-#define lt 35   //hedhom des attributs zeydin lil opprel bch naarfou enehi superieur inf etc lt par exp heya less than
+#define lt 35   
 #define bt 36 
 #define leq 37
 #define beq 38
@@ -92,7 +90,6 @@ void Reculer(int k);
 int UniLexId();
 int RangerId(int k, int *c);
 
-// Fonctions taa3 l pârtie 1 syntaxique 
 void P(); // P 
 void DCL(); // DCL 
 void D(); // DCL PRIME 
@@ -112,7 +109,7 @@ int Terme();
 void T(int h);
 int Facteur();
 // Fonctions partie Semantique 
-int chercher_type(char* variable); // va accepter index f tableau ta3 les symboles w traj3elna chnowa type ta3 l variable
+int chercher_type(char* variable); 
 void ajouter_type(int index_dans_tabID , int tp);
 int compatible(int t1 , int t2 );
 int creer_etiq();
